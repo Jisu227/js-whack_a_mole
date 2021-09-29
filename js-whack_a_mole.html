@@ -117,6 +117,43 @@
   const $game = document.querySelector('#game');
   const $start = document.querySelector('#start');
   const $$cells = document.querySelectorAll('.cell');
+
+  const holes = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+  let started = false;
+  let score = 0;
+
+  $start.addEventListener('click', () => {
+    if (started) return; // 이미 시작한 상태면 무시
+    started = true;
+    console.log('시작');
+    const tickId = setInterval(tick,1000);
+    tick();
+  });
+
+  let gopherPercent = 0.3;
+  let bombPercent = 0.5;
+  function tick() {
+    holes.forEach((hole, index) => {
+      if(hole) return;// 무언가가 일어나고 있으면 return
+      const randomValue = Math.random();
+      if(Math.random() < gopherPercent) {
+        const $gopher = $$cells[index].querySelector('.gopher');
+        holes[index] = setTimeout(() => { // 1초 뒤에 사라짐
+          $gopher.classList.add('hidden');
+          holes[index] = 0;
+        }, 1000);
+        $gopher.classList.remove('hidden');
+      } else if (Math.random()< bombPercent) {
+        const $bomb = $$cells[index].querySelector('.bomb');
+        holes[index] = setTimeout(() => { // 1초 뒤에 사라짐
+          $bomb.classList.add('hidden');
+          holes[index] = 0;
+        }, 1000);
+        $bomb.classList.remove('hidden');
+      }
+    });
+  }
+
 </script>
 </body>
 </html>
